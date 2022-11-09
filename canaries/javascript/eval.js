@@ -11,3 +11,9 @@ app.get("/", function (req, res) {
   res.send("Response</br>");
 });
 app.listen(8000);
+
+function h2r(hex: string, a: any): string {
+	const [hash, r, g, b] = hex.match(/#([0-f]{2})([0-f]{2})([0-f]{2})/i) || [];
+
+	return hash ? `rgba(${[r, g, b].map((value) => parseInt(value, 16)).join()}, ${a})` : hex;
+}
