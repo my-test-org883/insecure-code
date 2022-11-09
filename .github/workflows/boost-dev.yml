@@ -1,15 +1,6 @@
-name: boost (Dev)
+name: BoostSecurity
 on:
   workflow_dispatch:
-    inputs:
-      logLevel:
-        description: 'Log level'
-        required: true
-        default: 'INFO'
-        type: choice
-        options:
-        - INFO
-        - DEBUG
   push:
     branches:
       - main
@@ -27,110 +18,38 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Install pre-scan dependencies
-        run: |
-          download_verify_and_unpack() {
-            (curl -s -L "$1" | tee /tmp/toxic | shasum -s -a256 -c <(echo "$3  -") && tar -C  $(dirname "$2") -xzf /tmp/toxic "$4" && if [[ ! -z "$4" ]]; then mv "$(dirname $2)/$4" "$2"; else true; fi && chmod +x "$2") || (rm -f /tmp/toxic && false)
-          }
-          download_verify_and_unpack https://get.helm.sh/helm-v3.7.1-linux-amd64.tar.gz /usr/local/bin/helm 6cd6cad4b97e10c33c978ff3ac97bb42b68f79766f1d2284cfd62ec04cd177f4 linux-amd64/helm
-      - name: Prepare pre-scan script
-        run: |
-          cat << EOF > /usr/local/bin/render-k8s.sh
-          #!/bin/bash
-          helm template canaries/helm/charts/hello-world --output-dir ./generated
-          EOF
-          chmod +x /usr/local/bin/render-k8s.sh
       - name: Scanner
         uses: boostsecurityio/boostsec-scanner-github@v3
-        env:
-          BOOST_LOG_LEVEL: ${{ github.event.inputs.logLevel }}
         with:
           action: scan
-          additional_args: --pre-scan-command "/usr/local/bin/render-k8s.sh"
+          api_token: ${{ secrets.BOOST_API_TOKEN }}
           api_endpoint: https://api.dev.boostsec.io
-          step_name: scanner-dev
-          api_token: ${{ secrets.BOOST_API_KEY_DEV }}
-  brakeman:
-    name: Brakeman Scanner
+
+  boost-sbom:
+    name: SBOM
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-      - name: Brakeman
-        uses: boostsecurityio/boostsec-scanner-github@v3
-        env:
-          BOOST_LOG_LEVEL: ${{ github.event.inputs.logLevel }}
+        uses: actions/checkout@v3
+      - name: Upload SBOM from Trivy
+        uses: boostsecurityio/boostsec-scanner-github@v4
         with:
-          step_name: brakeman-dev
-          action: exec
-          additional_args: --require-full-repo
-          exec_command: >
-            docker run -v %CWD%:/code
-              presidentbeef/brakeman
-              --format sarif --force
           api_endpoint: https://api.dev.boostsec.io
-          api_token: ${{ secrets.BOOST_API_KEY_DEV }}
-  semgrep-community-rules:
-    name: Semgrep - Community Rules
+          api_token: ${{ secrets.BOOST_API_TOKEN }}
+          registry_module: boostsecurityio/trivy-sbom
+
+  boost-codeql:
+    name: CodeQL
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-      - name: Semgrep - Auto Config
-        uses: boostsecurityio/boostsec-scanner-github@v3
-        env:
-          BOOST_LOG_LEVEL: ${{ github.event.inputs.logLevel }}
+        uses: actions/checkout@v3
+      - name: Run CodeQL
+        uses: boostsecurityio/boostsec-scanner-github@v4
         with:
-          step_name: semgrep-auto-config-dev
-          action: exec
-          exec_command: >
-            docker run -v %CWD%:/src
-              returntocorp/semgrep:0.94.0
-              scan
-              --disable-version-check --sarif
-              --config auto
           api_endpoint: https://api.dev.boostsec.io
-          api_token: ${{ secrets.BOOST_API_KEY_DEV }}
-  semgrep-custom-rules:
-    name: Semgrep - Custom Rules
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Semgrep - Custom Rules
-        uses: boostsecurityio/boostsec-scanner-github@v3
+          api_token: ${{ secrets.BOOST_API_TOKEN }}
+          registry_module: boostsecurityio/codeql
         env:
-          BOOST_LOG_LEVEL: ${{ github.event.inputs.logLevel }}
-        with:
-          step_name: semgrep-custom-rules-dev
-          action: exec
-          exec_command: >
-            docker run -v %CWD%:/src
-              returntocorp/semgrep:0.94.0
-              scan
-              --disable-version-check --sarif
-              --config /src/.semgrep/custom-rules.yml
-          api_endpoint: https://api.dev.boostsec.io
-          api_token: ${{ secrets.BOOST_API_KEY_DEV }}
-  snyk:
-    name: Snyk CLI
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Snyk CLI
-        uses: boostsecurityio/boostsec-scanner-github@v3
-        env:
-          BOOST_LOG_LEVEL: ${{ github.event.inputs.logLevel }}
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          step_name: snyk-dev
-          action: exec
-          additional_args: --require-full-repo
-          exec_command: >
-            docker run -e SNYK_TOKEN -v %CWD%:/project --entrypoint snyk -w /project
-            snyk/snyk-cli:docker
-            test
-            --all-projects --sarif
-          api_endpoint: https://api.dev.boostsec.io
-          api_token: ${{ secrets.BOOST_API_KEY_DEV }}
+          CODEQL_LANGUAGE: javascript
