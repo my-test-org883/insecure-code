@@ -16,7 +16,7 @@ jobs:
     name: SBOM diff
     runs-on: ubuntu-latest
     env:
-      BOOST_SCANNER_REGISTRY_REPO_DEV: https://github.com/boostsecurityio/scanner-testing
+      BOOST_SCANNER_REGISTRY_REPO_DEV: https://github.com/boostsecurityio/scanner-testing/
     steps:
       - name: Checkout
         uses: actions/checkout@v3
