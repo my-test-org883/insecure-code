@@ -3,6 +3,8 @@ import json
 
 app = flask.Flask(__name__)
 
+my-token = "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"
+
 @app.route("/route_param/<route_param>")
 def route_param(route_param):
     return open("/tmp/" + route_param, "r").read()
