@@ -26,3 +26,23 @@ def subexpression2():
 @app.route("/")
 def ok():
     return open("/tmp/FLAG.txt", "r").read()
+
+@app.route("/read/<path:name>")
+def read(name):
+    """
+    Safe demo endpoint: resembles a file-read handler but cannot be used
+    for traversal or arbitrary file access.
+    Use it to exercise scanners/rules without introducing a real vuln.
+    """
+    allowed = {
+        "readme.txt": "/tmp/readme.txt",
+        "sample.txt": "/tmp/sample.txt",
+    }
+    target = allowed.get(name)
+    if not target:
+        return "Not allowed", 403
+    try:
+        with open(target, "r", encoding="utf-8") as f:
+            return f.read()
+    except FileNotFoundError:
+        return "Not found", 404
