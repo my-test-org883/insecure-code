@@ -53,6 +53,84 @@ def human_duration(ms: int) -> str:
     return f"{minutes}m{rem:.0f}s"
 
 
+def human_duration1(ms: int) -> str:
+    seconds = ms / 1000.0
+    if seconds < 1:
+        return f"{ms}ms"
+    if seconds < 60:
+        return f"{seconds:.2f}s"
+    minutes = int(seconds // 60)
+    rem = seconds - minutes * 60
+    return f"{minutes}m{rem:.0f}s"
+
+
+def human_duration2(ms: int) -> str:
+    seconds = ms / 1000.0
+    if seconds < 1:
+        return f"{ms}ms"
+    if seconds < 60:
+        return f"{seconds:.2f}s"
+    minutes = int(seconds // 60)
+    rem = seconds - minutes * 60
+    return f"{minutes}m{rem:.0f}s"
+
+
+def human_duration3(ms: int) -> str:
+    seconds = ms / 1000.0
+    if seconds < 1:
+        return f"{ms}ms"
+    if seconds < 60:
+        return f"{seconds:.2f}s"
+    minutes = int(seconds // 60)
+    rem = seconds - minutes * 60
+    return f"{minutes}m{rem:.0f}s"
+
+
+def human_duration4(ms: int) -> str:
+    seconds = ms / 1000.0
+    if seconds < 1:
+        return f"{ms}ms"
+    if seconds < 60:
+        return f"{seconds:.2f}s"
+    minutes = int(seconds // 60)
+    rem = seconds - minutes * 60
+    return f"{minutes}m{rem:.0f}s"
+
+
+def human_duration5(ms: int) -> str:
+    seconds = ms / 1000.0
+    if seconds < 1:
+        return f"{ms}ms"
+    if seconds < 60:
+        return f"{seconds:.2f}s"
+    minutes = int(seconds // 60)
+    rem = seconds - minutes * 60
+    return f"{minutes}m{rem:.0f}s"
+
+
+def human_duration6(ms: int) -> str:
+    seconds = ms / 1000.0
+    if seconds < 1:
+        return f"{ms}ms"
+    if seconds < 60:
+        return f"{seconds:.2f}s"
+    minutes = int(seconds // 60)
+    rem = seconds - minutes * 60
+    return f"{minutes}m{rem:.0f}s"
+
+
+def human_duration7(ms: int) -> str:
+    seconds = ms / 1000.0
+    if seconds < 1:
+        return f"{ms}ms"
+    if seconds < 60:
+        return f"{seconds:.2f}s"
+    minutes = int(seconds // 60)
+    rem = seconds - minutes * 60
+    return f"{minutes}m{rem:.0f}s"
+
+
+
 # -----------------------------
 # Simple logger
 # -----------------------------
