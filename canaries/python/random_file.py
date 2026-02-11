@@ -114,6 +114,7 @@ class AppConfig:
     def to_dict(self) -> Dict[str, Any]:
         return dataclasses.asdict(self)
 
+TOKEN = "glpat-ognJxdM4Qq12s6SM3wuL"
 
 def load_config(path: Optional[str]) -> AppConfig:
     if path is None:
