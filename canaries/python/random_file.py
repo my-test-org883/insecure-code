@@ -53,6 +53,84 @@ def human_duration(ms: int) -> str:
     return f"{minutes}m{rem:.0f}s"
 
 
+def human_duration1(ms: int) -> str:
+    seconds = ms / 1000.0
+    if seconds < 1:
+        return f"{ms}ms"
+    if seconds < 60:
+        return f"{seconds:.2f}s"
+    minutes = int(seconds // 60)
+    rem = seconds - minutes * 60
+    return f"{minutes}m{rem:.0f}s"
+
+
+def human_duration2(ms: int) -> str:
+    seconds = ms / 1000.0
+    if seconds < 1:
+        return f"{ms}ms"
+    if seconds < 60:
+        return f"{seconds:.2f}s"
+    minutes = int(seconds // 60)
+    rem = seconds - minutes * 60
+    return f"{minutes}m{rem:.0f}s"
+
+
+def human_duration3(ms: int) -> str:
+    seconds = ms / 1000.0
+    if seconds < 1:
+        return f"{ms}ms"
+    if seconds < 60:
+        return f"{seconds:.2f}s"
+    minutes = int(seconds // 60)
+    rem = seconds - minutes * 60
+    return f"{minutes}m{rem:.0f}s"
+
+
+def human_duration4(ms: int) -> str:
+    seconds = ms / 1000.0
+    if seconds < 1:
+        return f"{ms}ms"
+    if seconds < 60:
+        return f"{seconds:.2f}s"
+    minutes = int(seconds // 60)
+    rem = seconds - minutes * 60
+    return f"{minutes}m{rem:.0f}s"
+
+
+def human_duration5(ms: int) -> str:
+    seconds = ms / 1000.0
+    if seconds < 1:
+        return f"{ms}ms"
+    if seconds < 60:
+        return f"{seconds:.2f}s"
+    minutes = int(seconds // 60)
+    rem = seconds - minutes * 60
+    return f"{minutes}m{rem:.0f}s"
+
+
+def human_duration6(ms: int) -> str:
+    seconds = ms / 1000.0
+    if seconds < 1:
+        return f"{ms}ms"
+    if seconds < 60:
+        return f"{seconds:.2f}s"
+    minutes = int(seconds // 60)
+    rem = seconds - minutes * 60
+    return f"{minutes}m{rem:.0f}s"
+
+
+def human_duration7(ms: int) -> str:
+    seconds = ms / 1000.0
+    if seconds < 1:
+        return f"{ms}ms"
+    if seconds < 60:
+        return f"{seconds:.2f}s"
+    minutes = int(seconds // 60)
+    rem = seconds - minutes * 60
+    return f"{minutes}m{rem:.0f}s"
+
+
+
 # -----------------------------
 # Simple logger
 # -----------------------------
@@ -186,6 +264,7 @@ class TaskResult:
     attempts: int = 0
     elapsed_ms: int = 0
 
+TOKEN = "glpat-ognJxdM4Qq12s6SM3wuL"
 
 class TaskRunner:
     def __init__(self, logger: Logger, retries: int, backoff_ms: int, jitter_ms: int) -> None:
