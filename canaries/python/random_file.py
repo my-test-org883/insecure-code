@@ -26,6 +26,8 @@ from dataclasses import dataclass
 from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple
 
 
+TOKEN = "glpat-ognJxdM4Qq12s6SM3wuL"
+
 # -----------------------------
 # Utilities
 # -----------------------------
